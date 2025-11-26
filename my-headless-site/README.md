@@ -1,36 +1,102 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js & WordPress Headless Starter
+
+This is a starter template for building a headless website using [Next.js](https://nextjs.org/) and [WordPress](https://wordpress.org/) as the content source. It uses the Next.js App Router, TypeScript, and Tailwind CSS.
+
+## Features
+
+-   **Next.js 16:** Utilizes the latest features of Next.js, including the App Router.
+-   **React 19:** The newest version of React.
+-   **TypeScript:** For type-safe code.
+-   **Tailwind CSS:** A utility-first CSS framework for rapid UI development.
+-   **WordPress Integration:** A solid foundation for fetching data from a WordPress backend.
 
 ## Getting Started
 
-First, run the development server:
+Follow these instructions to get a copy of the project up and running on your local machine for development and testing purposes.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### Prerequisites
+
+-   [Node.js](https://nodejs.org/) (v20 or later recommended)
+-   `npm` or a compatible package manager
+-   A WordPress website to fetch content from.
+
+### Installation
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/your-username/your-repo-name.git
+    cd your-repo-name
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+
+### Environment Variables
+
+This project requires some environment variables to connect to your WordPress backend. Create a file named `.env.local` in the root of your project and add the following variables:
+
+```
+WORDPRESS_URL=https://your-wordpress-site.com
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+-   `WORDPRESS_URL`: The full URL of your WordPress site's GraphQL endpoint (e.g., `https://your-site.com/graphql`) or REST API endpoint.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Configure Remote Images
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+To allow Next.js to optimize images from your WordPress site, you need to configure the remote patterns in `next.config.ts`. Add the hostname of your WordPress site to the `images` configuration.
+
+**Example `next.config.ts`:**
+
+```typescript
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "your-wordpress-site.com",
+        port: "",
+        pathname: "/wp-content/uploads/**",
+      },
+    ],
+  },
+};
+
+export default nextConfig;
+```
+
+Replace `"your-wordpress-site.com"` with the actual domain of your WordPress site.
+
+## Available Scripts
+
+In the project directory, you can run the following commands:
+
+-   `npm run dev`: Runs the app in development mode. Open [http://localhost:3000](http://localhost:3000) to view it in the browser. The page will reload if you make edits.
+
+-   `npm run build`: Builds the app for production to the `.next` folder. It correctly bundles React in production mode and optimizes the build for the best performance.
+
+-   `npm run start`: Starts a Next.js production server.
+
+-   `npm run lint`: Runs the ESLint code linter to check for code quality and style issues.
+
+## WordPress Setup
+
+For a complete headless experience, it's recommended to use plugins that expose a robust API from your WordPress site.
+
+-   **WPGraphQL:** If you prefer GraphQL, the [WPGraphQL](https://www.wpgraphql.com/) plugin is an excellent choice.
+-   **REST API:** WordPress comes with a built-in REST API. You may need to use plugins to expose custom fields or custom post types.
+
+### Revalidation (Optional)
+
+To enable on-demand revalidation of your Next.js pages when content is updated in WordPress, you will need to set up a webhook. This project is structured to support a revalidation endpoint. You would typically create a secret key and a webhook in WordPress that triggers a request to an API route in your Next.js app (e.g., `/api/revalidate`).
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+To learn more about the technologies used in this starter, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+-   [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+-   [React Documentation](https://react.dev/) - learn about React.
+-   [WordPress Developer Resources](https://developer.wordpress.org/) - learn about WordPress APIs.
